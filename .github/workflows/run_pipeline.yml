@@ -1,0 +1,36 @@
+name: Run pipeline
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  run_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run machine_log
+        run: python machine_log.py
+
+      - name: Show generated data
+        run: ls -la data || true
+
+      - name: Run maintenance_report
+        run: python maintenance_report.py
+
+      # - name: Upload generated data as artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: generated-data
+      #     path: data
