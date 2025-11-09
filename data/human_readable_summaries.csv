@@ -1,0 +1,29 @@
+machine,summary
+M3,"Machine M3 | Risk Score: 100
+- Recent Avg Output: 68.5
+- Recent Avg Downtime (min): 16.5
+- Recent Avg Temp (C): 80.1
+- Anomalies detected in recent window: 1
+- Maintenance Note: Operator logs: 'Machine 3 showing heating since Monday; increased idle time.' Technical team to inspect cooling.
+=> Suggested Action: Inspect cooling system & schedule maintenance"
+M1,"Machine M1 | Risk Score: 0
+- Recent Avg Output: 115.5
+- Recent Avg Downtime (min): 0.0
+- Recent Avg Temp (C): 69.2
+- Anomalies detected in recent window: 0
+- Maintenance Note: All good. Routine lubrication performed yesterday. No overheating observed.
+=> Suggested Action: Inspect cooling system & schedule maintenance"
+M2,"Machine M2 | Risk Score: 0
+- Recent Avg Output: 96.0
+- Recent Avg Downtime (min): 0.0
+- Recent Avg Temp (C): 69.2
+- Anomalies detected in recent window: 0
+- Maintenance Note: Vibration noted on bearing B2 last week; monitored, no action taken.
+=> Suggested Action: Investigate logs; check bearings and PLC"
+M4,"Machine M4 | Risk Score: 0
+- Recent Avg Output: 77.0
+- Recent Avg Downtime (min): 0.0
+- Recent Avg Temp (C): 64.0
+- Anomalies detected in recent window: 0
+- Maintenance Note: Minor electrical hiccups observed; reset PLC on Friday.
+=> Suggested Action: Investigate logs; check bearings and PLC"

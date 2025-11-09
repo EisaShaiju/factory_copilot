@@ -1,0 +1,5 @@
+machine,recent_avg_output,recent_avg_downtime,recent_avg_temp,anomalies_in_window,risk_score
+M3,68.5,16.5,80.1,1,100
+M1,115.5,0.0,69.2,0,0
+M2,96.0,0.0,69.2,0,0
+M4,77.0,0.0,64.0,0,0

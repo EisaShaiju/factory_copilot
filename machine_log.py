@@ -1,7 +1,7 @@
 import os, io, json, textwrap, random, math, datetime
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import IsolationForest
+# from sklearn.ensemble import IsolationForest
 # from caas_jupyter_tools import display_dataframe_to_user
 
 base_dir = os.path.dirname(os.path.abspath(__file__))

@@ -2,10 +2,13 @@ name: Run pipeline
 
 on:
   workflow_dispatch: {}
+  push:
+    branches: [main]
 
 jobs:
   run_pipeline:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -15,22 +18,76 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run machine_log
-        run: python machine_log.py
+      - name: Show environment and installed packages
+        run: |
+          python -V
+          python -c "import sys; print('python executable:', sys.executable)"
+          pip --version
+          pip list
 
-      - name: Show generated data
+      - name: Quick import-check for required packages
+        run: |
+          python - <<'PY'
+          import sys
+          pkgs = ['pandas','numpy','sklearn']
+          missing = []
+          for p in pkgs:
+              try:
+                  __import__(p)
+              except Exception:
+                  missing.append(p)
+          if missing:
+              print('Missing packages:', missing, file=sys.stderr)
+              sys.exit(2)
+          print('All required packages importable')
+          PY
+
+      - name: Prepare logs directory
+        run: mkdir -p logs
+
+      - name: Run machine_log (capture logs)
+        run: |
+          set -euo pipefail
+          python -u machine_log.py 2>&1 | tee logs/machine_log.log
+
+      - name: Show generated data after machine_log
         run: ls -la data || true
 
-      - name: Run maintenance_report
-        run: python maintenance_report.py
+      - name: Run maintenance_report (capture logs)
+        run: |
+          set -euo pipefail
+          python -u maintenance_report.py 2>&1 | tee logs/maintenance_report.log
 
-      # - name: Upload generated data as artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: generated-data
-      #     path: data
+      - name: Run anomaly_detection (capture logs)
+        run: |
+          set -euo pipefail
+          python -u anomaly_detection.py 2>&1 | tee logs/anomaly_detection.log
+
+      - name: List outputs
+        run: |
+          echo "=== data ==="
+          ls -la data || true
+          echo "=== logs ==="
+          ls -la logs || true
+
+      - name: Upload data and logs as artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-data-and-logs
+          path: |
+            data
+            logs

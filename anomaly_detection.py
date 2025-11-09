@@ -4,7 +4,8 @@ import numpy as np
 from sklearn.ensemble import IsolationForest
 # from caas_jupyter_tools import display_dataframe_to_user
 
-from maintenance_report import df,reports
+from machine_log import df
+from maintenance_report import reports
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 out_dir = os.path.join(base_dir, "data")
